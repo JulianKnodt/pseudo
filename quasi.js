@@ -35,15 +35,16 @@ class mockFunc extends Function{
 };
 
 /**
- * Creates a pseudo-primitive 
- * @param thing - Thing to create a pseudo from. Can be an array, object, number, boolean, string, etc.
+ * Creates a quasi-primitive 
+ * @param thing - Thing to create a quasi from. Can be an array, object, number, boolean, string, etc.
  */
-const pseudo = (primitiveVar) => {
+const quasi = (primitiveVar) => {
   //Variables enclosed for internal use.
   let __onChange = [];
   let __onRetrieve = [];
   let simpleAccess = false;
   let __applyFunc;
+  let __constructor;
   let __functionCalls = {};
   return new Proxy(new mockFunc(primitiveVar), {
     get: (target, prop, receiver) => {
@@ -59,6 +60,9 @@ const pseudo = (primitiveVar) => {
             index = __onRetrieve.push(cb);
           } else if (event.toLowerCase() === 'call') {
             __applyFunc = cb;
+            index = 1;
+          } else if (event.toLowerCase() === 'new') {
+            __constructor = cb;
             index = 1;
           } else if (typeof target._[event] === 'function') {
             __functionCalls[event] = Array.isArray(__functionCalls[event]) ? __functionCalls[event] : [];
@@ -105,7 +109,7 @@ const pseudo = (primitiveVar) => {
         return simpleAccess = newVal;
       } else if (prop !== '_' && typeof target._ !== 'object') {
         //Case where trying to set property of proxy, but should only work if the object s
-        throw new Error("Can't define property of pseudo-primitive");
+        throw new Error("Can't define property of quasi-primitive");
       } else if (prop === '_') {
         //Case where trying to change the entire stored value
         return target[prop] = newVal;
@@ -123,7 +127,7 @@ const pseudo = (primitiveVar) => {
       } else if (typeof target._ === 'function') {
         return target._.bind(thisArg, ...argumentsList)();
       } else if (__applyFunc === undefined) {
-        throw new Error('No function set on pseudo: set using pseudo.on("call", functionToBeCalled)');
+        throw new Error('No function set on quasi: set using quasi.on("call", functionToBeCalled)');
       } else {
         throw new Error(`Unexpected value for __applyFunc, should be of type function, was of type ${typeof __applyFunc}`);
       }
@@ -134,11 +138,17 @@ const pseudo = (primitiveVar) => {
       } else {
         return target._[prop] !== undefined;
       }
+    },
+    construct: (target, argumentsList, newTarget) => {
+      let constructor = __constructor !== undefined ? __constructor : target._;
+      try {
+        return new constructor(...argumentsList);
+      } catch(e) {
+        e.message = e.message + " <= regardless, the quasi you passed might not be a constructor";
+        throw e;
+      }
     }
   });
 };
 
-let test = pseudo([1, 2, 77]);
-console.log(test.includes(77));
-
-module.exports = pseudo;
+module.exports = quasi;

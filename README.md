@@ -3,14 +3,14 @@
 #### Installation
 
 ```sh
-$ npm i pseudo-primitive
+$ npm i quasi-
 ```
 
 #### Bare Bones
 
 ```javascript
-const pseudo = require('psuedo-primitive'); 
-let message = pseudo("Hello world!");
+const quasi = require('quasi-'); 
+let message = quasi("Hello world!");
 message.on("change", (newVal, oldVal) => console.log(oldVal, "changed to:", newVal));
 
 //Variable Reassignment
@@ -22,15 +22,14 @@ message._ = "Yo wassup";
 console.log(message.slice(1));
 //Prints: o wassup
 
-
 ```
 
 
 #### Complexities
 
 ```javascript
-const pseudo = require('pseudo-primitive');
-let message = pseudo("Hello World");
+const quasi = require('quasi-');
+let message = quasi("Hello World");
 
 message.on('change', (newMessage, old) => console.log("Value changed to:", newMessage, "From:", old));
 
@@ -62,10 +61,30 @@ message.on('change', (newVal) => socket.emit(newVal));
 message.on('slice', () => throw new Error("Can't call slice within overwrite of slice"));
 
 //For immutability
-let array = pseudo(["CONSTANT", "ANOTHER_CONSTANT"]);
+let array = quasi(["CONSTANT", "ANOTHER_CONSTANT"]);
 array.on('change', () => {throw new Error('Immutable Array')});
 console.log(array.push(3));
 => Error: Immutable Array
+```
+
+#### Overloading
+
+```javascript
+const quasi = require('quasi-');
+
+let funcObjCons = quasi({property: "some property"});
+funcObjCons.on('call', () => console.log('Function was called'));
+funcObjCons.on('new', function(arg) {return {newProp: "this was a new object called with" + arg}});
+funcObjCons();
+//Prints: Function was called
+
+let test = new funcObjCons("quasi");
+console.log(test);
+//Prints: {newProp: "this was a new object called with quasi"};
+
+console.log(funcObjCons.property);
+//Prints: some property
+
 ```
 
 

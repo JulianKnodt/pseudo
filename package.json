@@ -1,21 +1,24 @@
 {
-  "name": "pseudo",
-  "version": "0.0.7",
-  "description": "pseudo-primitive creator",
-  "main": "pseudoPrimitive.js",
+  "name": "quasi-",
+  "version": "1.0.0",
+  "description": "quasi-primitive creator",
+  "main": "quasi.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "monkey-patching",
     "pseudo",
+    "quasi",
     "primitive",
     "listener",
     "proxy",
     "es6",
     "array",
     "classes",
-    "meta-programming"
+    "meta-programming",
+    "overloading",
+    "multi-tool"
   ],
   "repository" : {
     "type" : "git",
