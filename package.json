@@ -16,6 +16,10 @@
     "array",
     "classes"
   ],
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/JulianKnodt/pseudo.git"
+  },
   "author": "Julian Knodt <julianknodt@gmail.com>",
   "license": "MIT"
 }
