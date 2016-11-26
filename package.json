@@ -1,5 +1,5 @@
 {
-  "name": "pseudo-primitive",
+  "name": "pseudo",
   "version": "0.0.7",
   "description": "pseudo-primitive creator",
   "main": "pseudoPrimitive.js",
@@ -14,7 +14,8 @@
     "proxy",
     "es6",
     "array",
-    "classes"
+    "classes",
+    "meta-programming"
   ],
   "repository" : {
     "type" : "git",
